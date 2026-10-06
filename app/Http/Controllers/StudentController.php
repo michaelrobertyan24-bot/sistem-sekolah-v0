@@ -29,16 +29,16 @@ class StudentController extends Controller
     }
 
     // 3. Method Update (Memproses Pembaruan Data Siswa ke Database)
-    public function update(Request \(request, Student\)student)
+    public function update(Request $request, Student $student)
     {
-        \(validatedRequests =\)request->validate([
+        $validatedRequests = $request->validate([
             'name'  => ['required', 'string', 'max:255'],
             'nis'   => ['required', 'string', 'size:4', 'unique:students,nis,' . $student->id],
             'class' => ['required', 'string', 'max:50'],
             'major' => ['required', 'string', 'in:AKL,BiD,TKJ'],
         ]);
 
-        \(student->update(\)validatedRequests);
+        $student->update($validatedRequests);
 
         return redirect()->route('students.index')
             ->with('success', 'Berhasil Memperbarui Data Siswa');
@@ -51,5 +51,20 @@ class StudentController extends Controller
 
         return redirect()->route('students.index')
             ->with('success', 'Berhasil Menghapus Data Siswa');
+    }
+
+    public function store(StoreRequest $request)
+    {
+        $validatedRequests = $request->validate([
+            'name'  => ['required', 'string', 'max:255'],
+            'nis'   => ['required', 'string', 'size:4', 'unique:students'],
+            'class' => ['required', 'string', 'max:50'],
+            'major' => ['required', 'string', 'in:AKL,BiD,TKJ'],
+        ]);
+
+        Student::create($validatedRequests);
+
+        return redirect()->route('students.index')
+            ->with('success', 'Berhasil Menambahkan Data Siswa Baru');
     }
 }
