@@ -2,61 +2,54 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
-public function index()
-{
-
- $title = "Sistem Sekolah - Daftar Siswa";
-
-$students = Student::select('id', 'nis', 'name', 'class', 'major')->get();
-
-return view( 'students. index', [
-
-'title' => $title,
-
-'students' => $students
-
-]);
-}
-    public function show(string $id) 
+    // 1. Method Show (Menampilkan Detail Data Siswa)
+    public function show(Student $student)
     {
-        $title = "Sistem Sekolah - Detail Siswa";
         return view('students.show', [
-            'title' => $title
-        ]);;;
+            'student' => $student
+        ]);
     }
-    
-    public function create() 
-    {
-        $title = "Sistem Sekolah - Tambah Siswa";
-        return view('students.create', [
-            'title' => $title
-        ]);
-    }    
 
-    public function edit(string $id) 
+    // 2. Method Edit (Menampilkan Halaman Form Edit Siswa)
+    public function edit(Student $student)
     {
-        $title = "Sistem Sekolah - Edit Siswa";
+        $majors = [
+            'AKL', 'BiD', 'TKJ' // Daftar pilihan jurusan
+        ];
+
         return view('students.edit', [
-            'title' => $title
+            'student' => $student,
+            'majors'  => $majors
         ]);
-    }   
+    }
 
-    public function store() 
+    // 3. Method Update (Memproses Pembaruan Data Siswa ke Database)
+    public function update(Request \(request, Student\)student)
     {
-        return "Melakukan penambahan data siswa";
-    }  
+        \(validatedRequests =\)request->validate([
+            'name'  => ['required', 'string', 'max:255'],
+            'nis'   => ['required', 'string', 'size:4', 'unique:students,nis,' . $student->id],
+            'class' => ['required', 'string', 'max:50'],
+            'major' => ['required', 'string', 'in:AKL,BiD,TKJ'],
+        ]);
 
-    public function update(string $id) 
-    {
-        return "Melakukan perubahan data siswa dengan ID: {$id}";
-    }  
+        \(student->update(\)validatedRequests);
 
-    public function destroy(string $id) 
+        return redirect()->route('students.index')
+            ->with('success', 'Berhasil Memperbarui Data Siswa');
+    }
+
+    // 4. Method Destroy (Menghapus Data Siswa dari Database)
+    public function destroy(Student $student)
     {
-        return "Menghapus data siswa dengan ID: {$id}";
-    }  
+        $student->delete();
+
+        return redirect()->route('students.index')
+            ->with('success', 'Berhasil Menghapus Data Siswa');
+    }
 }
