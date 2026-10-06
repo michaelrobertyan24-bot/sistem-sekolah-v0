@@ -6,39 +6,21 @@ use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
-    public function index() 
-    {   
-        $title = "Sistem Sekolah - Daftar Siswa";
-        $students = [
-            [
-                'id' => 1,
-                'nis' => '1001',
-                'name' => 'Andi',
-                'class' => 'XII TKJ 1',
-                'major' => 'TKJ'
-            ],
-            [
-                'id' => 2,
-                'nis' => '1002',
-                'name' => 'Budi',
-                'class' => 'XII AKL 1',
-                'major' => 'AKL'
-            ],
-            [
-                'id' => 3,
-                'nis' => '1003',
-                'name' => 'Nina',
-                'class' => 'XII TKJ 3',
-                'major' => 'TKJ'
-            ],            
-        ];
+public function index()
+{
 
-        return view('students.index', [
-            'title' => $title,
-            'students' => $students
-        ]);
-    }
+ $title = "Sistem Sekolah - Daftar Siswa";
 
+$students = Student::select('id', 'nis', 'name', 'class', 'major')->get();
+
+return view( 'students. index', [
+
+'title' => $title,
+
+'students' => $students
+
+]);
+}
     public function show(string $id) 
     {
         $title = "Sistem Sekolah - Detail Siswa";
