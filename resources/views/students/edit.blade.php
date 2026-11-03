@@ -11,7 +11,9 @@
                 class="font-medium text-[#16213A]">Budi Ariyanto</span>.</p>
     </div>
 
-    <form action="" method="POST" class="space-y-6 border border-[#E5E3DB] bg-white p-8">
+    <form action="{{ route('students.update', ['student' => $student->id]) }}" method="POST" class="...">
+    @csrf
+    @method('PUT')
         <div>
             <label for="nis"
                 class="mb-1.5 block text-xs font-semibold uppercase tracking-[0.1em] text-[#16213A]">NIS</label>

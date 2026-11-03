@@ -1,9 +1,16 @@
 <?php
 
 use App\Http\Controllers\StudentController;
+use Illuminate\Support\Facades\Route;
 
-// Route untuk fitur Show (Detail Siswa), Edit, Update, dan Destroy (Hapus Data)
-Route::get('/students/{student}', [StudentController::class, 'show'])->name('students.show');
-Route::get('/students/{student}/edit', [StudentController::class, 'edit'])->name('students.edit');
-Route::put('/students/{student}', [StudentController::class, 'update'])->name('students.update');
-Route::delete('/students/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
+Route::redirect('/', '/students');
+
+Route::prefix('students')->name('students.')->group(function () {
+    Route::get('/', [StudentController::class, 'index'])->name('index');
+    Route::get('/create', [StudentController::class, 'create'])->name('create');
+    Route::post('/', [StudentController::class, 'store'])->name('store');
+    Route::get('/{student}', [StudentController::class, 'show'])->name('show');
+    Route::get('/{student}/edit', [StudentController::class, 'edit'])->name('edit');
+    Route::put('/{student}', [StudentController::class, 'update'])->name('update');
+    Route::delete('/{student}', [StudentController::class, 'destroy'])->name('destroy');
+});
